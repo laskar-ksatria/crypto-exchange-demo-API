@@ -30,7 +30,8 @@ app.use(require('./middlewares/errHandler'));
 //Websocket
 const WebSocket = require('ws');
 
-const apiKey = process.env.CRYPTO_COMPARE_API_KEY;
+// const apiKey = '71b91b63d42abb5291eda33b5d80f799c1e53fbde6b20221a89152402bfb0cf8';
+const apiKey = process.env.API_KEY
 
 const ccStreamer = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + apiKey);
 
@@ -38,13 +39,14 @@ function walkingWithWebSocket() {
     ccStreamer.on('open', function open() {
         var subRequest = {
             "action": "SubAdd",
-            "subs": ["2~Coinbase~BTC~USD", "2~Coinbase~LTC~USD", "2~Coinbase~ETH~USD", "2~Coinbase~TRX~USD"]
+            "subs": ["2~Coinbase~BTC~USD", "2~Coinbase~LTC~USD", "2~Coinbase~ETH~USD", "2~Coinbase~BCH~USD"]
         };
         ccStreamer.send(JSON.stringify(subRequest));
     });
     ccStreamer.on('message', function incoming(data) {
         let { PRICE, FROMSYMBOL, TOSYMBOL, VOLUME24HOUR } = JSON.parse(data);
-        if (PRICE && FROMSYMBOL && TOSYMBOL, VOLUME24HOUR) {
+        if (PRICE && FROMSYMBOL && TOSYMBOL && VOLUME24HOUR) {
+            console.log(PRICE);
             Io.emit(`realtime-price`, {PRICE, FROMSYMBOL, TOSYMBOL, VOLUME24HOUR});
         }
     });

@@ -31,7 +31,7 @@ class UserController {
 
     static Login(req,res,next) {
         let { password, username } = req.body;
-
+        console.log(req.body);
         User.findOne({username})
             .then(users => {
 

@@ -45,6 +45,7 @@ class OrderController {
         let id = req.params.tradeId;
         let userId = req.decoded.id;
         let { gainLoss } = req.body;
+        console.log(gainLoss);
         let fixBalance;
         Order.findOneAndUpdate({_id: id}, {gainLoss: gainLoss, status: false}, {omitUndefined: true, new: true})
             .then(order => {
