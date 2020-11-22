@@ -21,6 +21,7 @@ class UserController {
     };
 
     static create(req,res,next) {
+        console.log(req.body);
         let { username, password } = req.body;
         User.create({username, password})
             .then(user => {
