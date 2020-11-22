@@ -5,7 +5,7 @@ let cryptocompareWS = new websocket("wss://streaming.cryptocompare.com");
 let subs = {
     "action": "SubAdd",
     "subs": ["30~bitfinex~BTC~USD"],
-    "api_key": "bec71c0d7791bf5f64ed1d809c5acc423d7d40c9b02123ebc2fb7221f79ca387",
+
     "format": "streamer"
  }
 

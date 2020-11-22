@@ -31,8 +31,7 @@ app.use(require('./middlewares/errHandler'));
 //Websocket
 const WebSocket = require('ws');
 
-const apiKey = '71b91b63d42abb5291eda33b5d80f799c1e53fbde6b20221a89152402bfb0cf8';
-// const apiKey = process.env.API_KEY
+const apiKey = process.env.API_KEY
 
 const ccStreamer = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + apiKey);
 
@@ -47,6 +46,7 @@ function walkingWithWebSocket() {
     ccStreamer.on('message', function incoming(data) {
         let { PRICE, FROMSYMBOL, TOSYMBOL, VOLUME24HOUR } = JSON.parse(data);
         if (PRICE && FROMSYMBOL && TOSYMBOL && VOLUME24HOUR) {
+            console.log(PRICE);
             Io.emit(`realtime-price`, {PRICE, FROMSYMBOL, TOSYMBOL, VOLUME24HOUR});
         }
     });
@@ -57,6 +57,7 @@ walkingWithWebSocket();
 server.listen(PORT, () => console.log(`Server started on ${PORT}`));
 
 Io.on('connection', socket => {
+    console.log('Io connect');
     socket.on('disconnect', () => {})
 })
 
