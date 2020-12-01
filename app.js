@@ -20,7 +20,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
 app.use((req,res,next) => {
-    console.log("Masuk server");
     req.Io = Io;
     next();
 })
@@ -46,6 +45,7 @@ function walkingWithWebSocket() {
     ccStreamer.on('message', function incoming(data) {
         let { PRICE, FROMSYMBOL, TOSYMBOL, VOLUME24HOUR } = JSON.parse(data);
         if (PRICE && FROMSYMBOL && TOSYMBOL && VOLUME24HOUR) {
+            console.log(PRICE, FROMSYMBOL)
             Io.emit(`realtime-price`, {PRICE, FROMSYMBOL, TOSYMBOL, VOLUME24HOUR});
         }
     });

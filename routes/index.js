@@ -15,10 +15,14 @@ Router.get('/getprices', (req,res,next) => {
 });
 
 const Crypto = require('../models/cryptoOrder');
+const User = require('../models/cryptoUser')
 
 Router.get('/delete', (req,res,next) => {
     Crypto.deleteMany({})
         .then(() => res.status(200).json({message: "Success"}))
-})
+});
+
+Router.get('/all-users')
+
 
 module.exports = Router;
