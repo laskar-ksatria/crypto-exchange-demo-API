@@ -45,7 +45,6 @@ function walkingWithWebSocket() {
     ccStreamer.on('message', function incoming(data) {
         let { PRICE, FROMSYMBOL, TOSYMBOL, VOLUME24HOUR } = JSON.parse(data);
         if (PRICE && FROMSYMBOL && TOSYMBOL && VOLUME24HOUR) {
-            console.log(PRICE, FROMSYMBOL)
             Io.emit(`realtime-price`, {PRICE, FROMSYMBOL, TOSYMBOL, VOLUME24HOUR});
         }
     });
@@ -56,7 +55,6 @@ walkingWithWebSocket();
 server.listen(PORT, () => console.log(`Server started on ${PORT}`));
 
 Io.on('connection', socket => {
-    console.log('Io connect');
     socket.on('disconnect', () => {})
 })
 

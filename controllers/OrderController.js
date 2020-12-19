@@ -12,7 +12,7 @@ class OrderController {
 
     static readMe(req,res,next) {
         let user = req.decoded.id;
-        Order.find({user, status: true})
+        Order.find({user: user, status: true})
             .then(orders => {
                 res.status(200).json(orders)
             })
@@ -33,7 +33,7 @@ class OrderController {
                         Order.find({user, status: true})
                         .then(orders => {
                             Io.emit(`${_id}-updateorder`, orders);
-                            res.status(202).json({message: 'Order has executed'});
+                            res.status(202).json({message: 'Order has been executed', balance: demo_balance, orders: orders});
                         })
                     })
             })
@@ -45,13 +45,13 @@ class OrderController {
         let id = req.params.tradeId;
         let userId = req.decoded.id;
         let { gainLoss } = req.body;
-        console.log(gainLoss);
+        
         let fixBalance;
         Order.findOneAndUpdate({_id: id}, {gainLoss: gainLoss, status: false}, {omitUndefined: true, new: true})
             .then(order => {
                 User.findOneAndUpdate({_id: userId}, {$inc: {demo_balance: gainLoss}}, {omitUndefined: true, new: true})
                     .then(newUser => {
-                        res.status(201).json({message: 'Your order has been close', balance: fixBalance})
+                        res.status(201).json({message: 'Your order has been close', balance: newUser.demo_balance})
                         let { _id, demo_balance } = newUser;
                         Io.emit(`${_id}-balance`, demo_balance);
                         Order.find({user: userId, status: true})

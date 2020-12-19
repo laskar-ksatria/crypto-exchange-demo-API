@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Username cannot be empty']
+        required: [true, 'Password cannot be empty']
     },
     demo_balance: {
         type:Number,
