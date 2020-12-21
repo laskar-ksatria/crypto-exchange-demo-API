@@ -7,4 +7,5 @@ Router.get('/trade', OrderController.readAll);
 Router.get('/trade/mytrade', userAuth,OrderController.readMe);
 Router.post('/trade', userAuth, OrderController.create);
 Router.post('/updatetrade/:tradeId', userAuth, OrderController.updateGainLoss)
+Router.post('/transfer', userAuth, OrderController.sendBalance)
 module.exports = Router;
