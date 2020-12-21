@@ -50,10 +50,8 @@ class OrderController {
                         }else {
                             Order.create({pair, amount, price, user, order_type})
                                 .then(userOrder => {
-                                    console.log(userOrder)
                                     Order.find({user: req.decoded.id, status: true})
                                         .then(orders => {
-                                            console.log(orders, "0-----------")
                                             res.status(202).json({message: 'Order has been executed', balance: demo_balance, orders: orders});
                                         })
                                 })
@@ -91,7 +89,7 @@ class OrderController {
                     .then(newUser => {
                         res.status(201).json({message: 'Your order has been close', balance: newUser.demo_balance})
                         let { _id, demo_balance } = newUser;
-                        Io.emit(`${_id}-balance`, demo_balance);
+                        // Io.emit(`${_id}-balance`, demo_balance);
                         Order.find({user: userId, status: true})
                             .then(orders => {
                                 Io.emit(`${_id}-updateorder`, orders);
@@ -105,15 +103,17 @@ class OrderController {
         let Io = req.Io;
         let user = req.decoded.id;
         let userBalance;
+        let userId;
         User.findOne({username})
             .then(account => {
                 if (account) {
                     User.findOneAndUpdate({_id: account.id}, {$inc: {demo_balance: balance}}, {omitUndefined: true, new: true})
                         .then(newAccount => {
                             userBalance = newAccount.demo_balance
+                            userId = newAccount.id;
                             User.findOneAndUpdate({_id: req.decoded.id}, {$inc: {demo_balance: -balance}}, {omitUndefined: true, new: true})
                             .then(newAccount2 => {
-                                    Io.emit(`${newAccount.id}-balance`, {balance: userBalance, status: 'receive', message: "You have receive balance from " + newAccount2.username})
+                                    Io.emit(`${userId}-balance`, {balance: userBalance, status: 'receive', message: "You have receive balance from " + newAccount2.username})
                                     Io.emit(`${newAccount2.id}-balance`, {balance: newAccount2.demo_balance, status: 'send', message: "Balance transfer success"})
                                     res.status(202).json({message: "Balance has been transfer to" + newAccount2.username})
                                 })
